@@ -28,14 +28,12 @@ interface BundleEncoderInterface
 {
     /**
      * @param ResourceBundleInterface $bundle
-     *
      * @return self
      */
     public function addBundle(ResourceBundleInterface $bundle): self;
 
     /**
      * @param string $defaultLocale
-     *
      * @return array
      */
     public function getStorageData(string $defaultLocale): array;

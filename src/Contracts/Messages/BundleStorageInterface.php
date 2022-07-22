@@ -27,10 +27,10 @@ namespace Whoa\l10n\Contracts\Messages;
 interface BundleStorageInterface
 {
     /** Encode index */
-    const INDEX_PAIR_VALUE = 0;
+    public const INDEX_PAIR_VALUE = 0;
 
     /** Encode index */
-    const INDEX_PAIR_LOCALE = self::INDEX_PAIR_VALUE + 1;
+    public const INDEX_PAIR_LOCALE = self::INDEX_PAIR_VALUE + 1;
 
     /**
      * @return string
@@ -41,7 +41,6 @@ interface BundleStorageInterface
      * @param string $locale
      * @param string $namespace
      * @param string $key
-     *
      * @return bool
      */
     public function has(string $locale, string $namespace, string $key): bool;
@@ -50,7 +49,6 @@ interface BundleStorageInterface
      * @param string $locale
      * @param string $namespace
      * @param string $key
-     *
      * @return array|null
      */
     public function get(string $locale, string $namespace, string $key): ?array;
@@ -58,7 +56,6 @@ interface BundleStorageInterface
     /**
      * @param string $locale
      * @param string $namespace
-     *
      * @return bool
      */
     public function hasResources(string $locale, string $namespace): bool;
@@ -66,7 +63,6 @@ interface BundleStorageInterface
     /**
      * @param string $locale
      * @param string $namespace
-     *
      * @return array
      */
     public function getResources(string $locale, string $namespace): array;

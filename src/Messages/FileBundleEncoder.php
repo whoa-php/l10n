@@ -23,6 +23,7 @@ namespace Whoa\l10n\Messages;
 
 use Whoa\Contracts\L10n\MessageStorageInterface;
 use Whoa\l10n\Contracts\Messages\ResourceBundleInterface;
+
 use function assert;
 use function class_exists;
 use function class_implements;
@@ -42,19 +43,18 @@ class FileBundleEncoder extends BundleEncoder
     /**
      * @var string
      */
-    private $globMessagePatterns;
+    private string $globMessagePatterns;
 
     /**
      * @param iterable|null $messageDescriptions
-     * @param string        $localesDir
-     * @param string        $globMessagePatterns
+     * @param string $localesDir
+     * @param string $globMessagePatterns
      */
     public function __construct(
         ?iterable $messageDescriptions,
         string $localesDir,
         string $globMessagePatterns = '*.php'
-    )
-    {
+    ) {
         $this
             ->setGlobMessagePatterns($globMessagePatterns)
             ->loadDescriptions($messageDescriptions)
@@ -63,9 +63,7 @@ class FileBundleEncoder extends BundleEncoder
 
     /**
      * Method is used for loading resources from packages.
-     *
      * @param iterable|null $messageDescriptions
-     *
      * @return FileBundleEncoder
      * @see ProvidesMessageResourcesInterface
      *
@@ -83,7 +81,7 @@ class FileBundleEncoder extends BundleEncoder
                 /** @var MessageStorageInterface $messageStorage */
 
                 $properties = $messageStorage::getMessages();
-                $bundle     = new ResourceBundle($locale, $namespace, $properties);
+                $bundle = new ResourceBundle($locale, $namespace, $properties);
                 $this->addBundle($bundle);
             }
         }
@@ -93,7 +91,6 @@ class FileBundleEncoder extends BundleEncoder
 
     /**
      * @param string $localesDir
-     *
      * @return self
      */
     protected function loadBundles(string $localesDir): self
@@ -110,7 +107,7 @@ class FileBundleEncoder extends BundleEncoder
                 $localeDir = $fileOrDir;
                 foreach (glob($localeDirFullPath . $this->getGlobMessagePatterns()) as $messageFile) {
                     $namespace = pathinfo($messageFile, PATHINFO_FILENAME);
-                    $bundle    = $this->loadBundleFromFile($messageFile, $localeDir, $namespace);
+                    $bundle = $this->loadBundleFromFile($messageFile, $localeDir, $namespace);
                     $this->addBundle($bundle);
                 }
             }
@@ -129,7 +126,6 @@ class FileBundleEncoder extends BundleEncoder
 
     /**
      * @param string $globMessagePatterns
-     *
      * @return self
      */
     protected function setGlobMessagePatterns(string $globMessagePatterns): self
@@ -144,19 +140,14 @@ class FileBundleEncoder extends BundleEncoder
      * @param string $fileFullPath
      * @param string $localeDir
      * @param string $messageFile
-     *
      * @return ResourceBundleInterface
      */
     protected function loadBundleFromFile(
         string $fileFullPath,
         string $localeDir,
         string $messageFile
-    ): ResourceBundleInterface
-    {
-        /** @noinspection PhpIncludeInspection */
+    ): ResourceBundleInterface {
         $properties = require $fileFullPath;
-        $bundle     = new ResourceBundle($localeDir, $messageFile, $properties);
-
-        return $bundle;
+        return new ResourceBundle($localeDir, $messageFile, $properties);
     }
 }

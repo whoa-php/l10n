@@ -1,9 +1,8 @@
-<?php declare(strict_types=1);
-
-namespace Whoa\Tests\l10n\Format;
+<?php
 
 /**
  * Copyright 2015-2019 info@neomerx.com
+ * Modification Copyright 2021-2022 info@whoaphp.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +17,10 @@ namespace Whoa\Tests\l10n\Format;
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
+namespace Whoa\Tests\l10n\Format;
+
 use Whoa\l10n\Contracts\Format\TranslatorInterface;
 use Whoa\l10n\Format\Translator;
 use Whoa\l10n\Messages\BundleStorage;
@@ -29,8 +32,11 @@ use PHPUnit\Framework\TestCase;
  */
 class TranslatorTest extends TestCase
 {
-    const RESOURCES_DIR =
-        __DIR__ . DIRECTORY_SEPARATOR;
+    public const RESOURCES_DIR =
+        __DIR__ . DIRECTORY_SEPARATOR .
+        '..' . DIRECTORY_SEPARATOR .
+        'Messages' . DIRECTORY_SEPARATOR .
+        'Resources';
 
     /**
      * Test translate.
@@ -45,7 +51,7 @@ class TranslatorTest extends TestCase
         $this->assertEquals('Hello World', $translator->translateMessage('en_US', 'Messages', 'Hello World'));
         $this->assertEquals('Hallo Welt', $translator->translateMessage('DE', 'Messages', 'Hello World'));
         $this->assertEquals('Hallo Welt', $translator->translateMessage('dE_Lu', 'Messages', 'Hello World'));
-        /** @noinspection SpellCheckingInspection */
+
         $this->assertEquals(
             'Hallo Welt aus Österreich',
             $translator->translateMessage('de_AT', 'Messages', 'Hello World')
@@ -68,8 +74,6 @@ class TranslatorTest extends TestCase
         // Then it searches a value for that key in `de` resources and finds it.
         $this->assertEquals('Hallo Welt', $translator->translateMessage('en_US', 'Messages', 'Hello World'));
 
-        /** @noinspection SpellCheckingInspection */
-
         // Same story here but we don't have any values for a key 'Guten Morgen' so it returns the key itself.
         $this->assertEquals('Guten Morgen', $translator->translateMessage('en_US', 'Messages', 'Guten Morgen'));
 
@@ -81,7 +85,7 @@ class TranslatorTest extends TestCase
         $this->assertEquals('Hallo Welt', $translator->translateMessage('DE', 'Messages', 'Hello World'));
 
         $this->assertEquals('Hallo Welt', $translator->translateMessage('dE_Lu', 'Messages', 'Hello World'));
-        /** @noinspection SpellCheckingInspection */
+
         $this->assertEquals(
             'Hallo Welt aus Österreich',
             $translator->translateMessage('de_AT', 'Messages', 'Hello World')

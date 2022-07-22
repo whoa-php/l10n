@@ -24,6 +24,7 @@ namespace Whoa\l10n\Format;
 use Whoa\l10n\Contracts\Format\TranslatorInterface;
 use Whoa\l10n\Contracts\Messages\BundleStorageInterface;
 use MessageFormatter;
+
 use function assert;
 use function call_user_func;
 use function is_object;
@@ -38,7 +39,7 @@ class Translator implements TranslatorInterface
     /**
      * @var BundleStorageInterface
      */
-    private $storage;
+    private BundleStorageInterface $storage;
 
     /**
      * @param BundleStorageInterface $storage
@@ -50,15 +51,13 @@ class Translator implements TranslatorInterface
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function translateMessage(string $locale, string $namespace, string $message, array $args = []): string
     {
         $translation = $this->getStorage()->get($locale, $namespace, $message);
         if ($translation !== null) {
             $message = $translation[BundleStorageInterface::INDEX_PAIR_VALUE];
-            $locale  = $translation[BundleStorageInterface::INDEX_PAIR_LOCALE];
+            $locale = $translation[BundleStorageInterface::INDEX_PAIR_LOCALE];
         }
 
         return static::formatMessage($locale, $message, $args);
@@ -74,7 +73,6 @@ class Translator implements TranslatorInterface
 
     /**
      * @param BundleStorageInterface $storage
-     *
      * @return TranslatorInterface
      */
     public function setStorage(BundleStorageInterface $storage): TranslatorInterface
@@ -87,30 +85,29 @@ class Translator implements TranslatorInterface
     /**
      * @param string $locale
      * @param string $message
-     * @param array  $args
-     *
+     * @param array $args
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected static function formatMessage(string $locale, string $message, array $args): string
     {
         // underlying `format` method cannot work with arguments that are not convertible to string
         // therefore we have to check that only those that actually can be used
-        assert(call_user_func(function () use ($args) : bool {
-            $result = true;
-            foreach ($args as $arg) {
-                $result = $result &&
-                    is_scalar($arg) === true ||
-                    $arg === null ||
-                    (is_object($arg) === true && method_exists($arg, '__toString') === true);
-            }
+        assert(
+            call_user_func(function () use ($args): bool {
+                $result = true;
+                foreach ($args as $arg) {
+                    $result = $result &&
+                        is_scalar($arg) === true ||
+                        $arg === null ||
+                        (is_object($arg) === true && method_exists($arg, '__toString') === true);
+                }
 
-            return $result;
-        }));
+                return $result;
+            })
+        );
 
         $formatter = MessageFormatter::create($locale, $message);
-        $message   = $formatter->format($args);
+        $message = $formatter->format($args);
         assert($message !== false, $formatter->getErrorMessage());
 
         return $message;

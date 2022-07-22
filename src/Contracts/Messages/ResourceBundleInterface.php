@@ -28,7 +28,6 @@ interface ResourceBundleInterface
 {
     /**
      * @param string $key
-     *
      * @return string
      */
     public function getValue(string $key): string;

@@ -22,6 +22,7 @@ declare (strict_types=1);
 namespace Whoa\l10n\Messages;
 
 use Whoa\l10n\Contracts\Messages\BundleStorageInterface;
+
 use function array_keys;
 use function assert;
 use function count;
@@ -35,25 +36,25 @@ use function strlen;
 class BundleStorage implements BundleStorageInterface
 {
     /** Encode index */
-    const INDEX_DEFAULT_LOCALE = 0;
+    public const INDEX_DEFAULT_LOCALE = 0;
 
     /** Encode index */
-    const INDEX_DATA = self::INDEX_DEFAULT_LOCALE + 1;
+    public const INDEX_DATA = self::INDEX_DEFAULT_LOCALE + 1;
 
     /**
      * @var array
      */
-    private $encodedStorage;
+    private array $encodedStorage;
 
     /**
      * @var string[]
      */
-    private $locales;
+    private array $locales;
 
     /**
      * @var string
      */
-    private $defaultLocale;
+    private string $defaultLocale;
 
     /**
      * @param array $encodedStorage
@@ -70,9 +71,7 @@ class BundleStorage implements BundleStorageInterface
     {
         assert(empty($locale) === false && empty($namespace) === false && strlen($key) > 0);
 
-        $has = isset($this->getEncodedStorage()[$locale][$namespace][$key]);
-
-        return $has;
+        return isset($this->getEncodedStorage()[$locale][$namespace][$key]);
     }
 
     /**
@@ -97,9 +96,7 @@ class BundleStorage implements BundleStorageInterface
     {
         assert(empty($locale) === false && empty($namespace) === false);
 
-        $has = isset($this->getEncodedStorage()[$locale][$namespace]);
-
-        return $has;
+        return isset($this->getEncodedStorage()[$locale][$namespace]);
     }
 
     /**
@@ -111,9 +108,7 @@ class BundleStorage implements BundleStorageInterface
 
         assert($this->hasResources($locale, $namespace) === true);
 
-        $result = $this->getEncodedStorage()[$locale][$namespace];
-
-        return $result;
+        return $this->getEncodedStorage()[$locale][$namespace];
     }
 
     /**
@@ -134,9 +129,8 @@ class BundleStorage implements BundleStorageInterface
 
     /**
      * @param string[] $locales
-     * @param string   $locale
-     * @param string   $defaultLocale
-     *
+     * @param string $locale
+     * @param string $defaultLocale
      * @return string
      */
     protected function lookupLocale(array $locales, string $locale, string $defaultLocale): string
@@ -155,7 +149,6 @@ class BundleStorage implements BundleStorageInterface
 
     /**
      * @param array $encodedStorage
-     *
      * @return self
      */
     protected function setEncodedStorage(array $encodedStorage): self
@@ -168,9 +161,9 @@ class BundleStorage implements BundleStorageInterface
         // keys, values and cultures are non-empty strings
         assert(is_array($encodedData) === true && $this->checkEncodedData($encodedData) === true);
 
-        $this->defaultLocale  = $encodedStorage[static::INDEX_DEFAULT_LOCALE];
+        $this->defaultLocale = $encodedStorage[static::INDEX_DEFAULT_LOCALE];
         $this->encodedStorage = $encodedData;
-        $this->locales        = array_keys($encodedData);
+        $this->locales = array_keys($encodedData);
 
         return $this;
     }
@@ -226,7 +219,7 @@ class BundleStorage implements BundleStorageInterface
 
     /**
      * @param string $key
-     * @param array  $valueAndLocale
+     * @param array $valueAndLocale
      *
      * @return bool
      */

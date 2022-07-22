@@ -24,6 +24,7 @@ namespace Whoa\l10n\Messages;
 use Whoa\l10n\Contracts\Messages\BundleEncoderInterface;
 use Whoa\l10n\Contracts\Messages\BundleStorageInterface;
 use Whoa\l10n\Contracts\Messages\ResourceBundleInterface;
+
 use function array_diff;
 use function array_intersect;
 use function array_keys;
@@ -38,7 +39,7 @@ class BundleEncoder implements BundleEncoderInterface
     /**
      * @var array
      */
-    private $bundles = [];
+    private array $bundles = [];
 
     /**
      * @inheritdoc
@@ -60,10 +61,10 @@ class BundleEncoder implements BundleEncoderInterface
         $data = [];
         foreach ($this->getLocales() as $locale) {
             $localizedNamespaces = $this->getNamespaces($locale);
-            $combinedNamespaces  = $defaultNamespaces + $localizedNamespaces;
+            $combinedNamespaces = $defaultNamespaces + $localizedNamespaces;
             foreach ($combinedNamespaces as $namespace) {
-                $bundle                    = $this->getBundle($locale, $namespace);
-                $bundle                    = $bundle !== null ? $bundle : $this->getBundle($defaultLocale, $namespace);
+                $bundle = $this->getBundle($locale, $namespace);
+                $bundle = $bundle !== null ? $bundle : $this->getBundle($defaultLocale, $namespace);
                 $data[$locale][$namespace] = $defaultLocale === $locale ? $this->encodeBundle($bundle) :
                     $this->encodeMergedBundles($bundle, $this->getBundle($defaultLocale, $namespace));
             }
@@ -71,7 +72,7 @@ class BundleEncoder implements BundleEncoderInterface
 
         return [
             BundleStorage::INDEX_DEFAULT_LOCALE => $defaultLocale,
-            BundleStorage::INDEX_DATA           => $data
+            BundleStorage::INDEX_DATA => $data
         ];
     }
 
@@ -85,7 +86,6 @@ class BundleEncoder implements BundleEncoderInterface
 
     /**
      * @param ResourceBundleInterface $bundle
-     *
      * @return array
      */
     private function encodeBundle(ResourceBundleInterface $bundle): array
@@ -101,42 +101,37 @@ class BundleEncoder implements BundleEncoderInterface
     /**
      * @param string $locale
      * @param string $namespace
-     *
      * @return null|ResourceBundleInterface
      */
-    private function getBundle(string $locale, string $namespace)
+    private function getBundle(string $locale, string $namespace): ?ResourceBundleInterface
     {
         assert(empty($locale) === false && empty($namespace) === false);
 
-        $bundles   = $this->getBundles();
+        $bundles = $this->getBundles();
         $hasBundle = isset($bundles[$locale][$namespace]) === true;
-        $result    = $hasBundle === true ? $bundles[$locale][$namespace] : null;
-
-        return $result;
+        return $hasBundle === true ? $bundles[$locale][$namespace] : null;
     }
 
     /**
-     * @param ResourceBundleInterface      $localizedBundle
+     * @param ResourceBundleInterface $localizedBundle
      * @param ResourceBundleInterface|null $defaultBundle
-     *
      * @return array
      */
     private function encodeMergedBundles(
         ResourceBundleInterface $localizedBundle,
         ResourceBundleInterface $defaultBundle = null
-    ): array
-    {
+    ): array {
         if ($defaultBundle === null) {
             // there is no default bundle for this localized one
             return $this->encodeBundle($localizedBundle);
         }
 
         $localizedKeys = $localizedBundle->getKeys();
-        $defaultKeys   = $defaultBundle->getKeys();
+        $defaultKeys = $defaultBundle->getKeys();
 
-        $commonKeys        = array_intersect($localizedKeys, $defaultKeys);
+        $commonKeys = array_intersect($localizedKeys, $defaultKeys);
         $localizedOnlyKeys = array_diff($localizedKeys, $commonKeys);
-        $defaultOnlyKeys   = array_diff($defaultKeys, $commonKeys);
+        $defaultOnlyKeys = array_diff($defaultKeys, $commonKeys);
 
         $encodedBundle = [];
 
@@ -163,40 +158,33 @@ class BundleEncoder implements BundleEncoderInterface
 
     /**
      * @param string $locale
-     *
      * @return bool
      */
     private function hasLocale(string $locale): bool
     {
         assert(empty($locale) === false);
 
-        $result = in_array($locale, $this->getLocales());
-
-        return $result;
+        return in_array($locale, $this->getLocales());
     }
 
     /**
      * @param string $locale
-     *
      * @return string[]
      */
     private function getNamespaces(string $locale): array
     {
-        $result = $this->hasLocale($locale) === true ? array_keys($this->getBundles()[$locale]) : [];
-
-        return $result;
+        return $this->hasLocale($locale) === true ? array_keys($this->getBundles()[$locale]) : [];
     }
 
     /**
      * @param ResourceBundleInterface $bundle
-     * @param string                  $key
-     *
+     * @param string $key
      * @return string[]
      */
     private function getBundleValue(ResourceBundleInterface $bundle, string $key): array
     {
         return [
-            BundleStorageInterface::INDEX_PAIR_VALUE  => $bundle->getValue($key),
+            BundleStorageInterface::INDEX_PAIR_VALUE => $bundle->getValue($key),
             BundleStorageInterface::INDEX_PAIR_LOCALE => $bundle->getLocale(),
         ];
     }

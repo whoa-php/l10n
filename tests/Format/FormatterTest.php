@@ -1,9 +1,8 @@
-<?php declare(strict_types=1);
-
-namespace Whoa\Tests\l10n\Format;
+<?php
 
 /**
  * Copyright 2015-2019 info@neomerx.com
+ * Modification Copyright 2021-2022 info@whoaphp.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +16,10 @@ namespace Whoa\Tests\l10n\Format;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+declare(strict_types=1);
+
+namespace Whoa\Tests\l10n\Format;
 
 use Whoa\l10n\Format\Formatter;
 use Whoa\l10n\Format\Translator;
@@ -35,7 +38,7 @@ class FormatterTest extends TestCase
     public function testFormatter(): void
     {
         $storageData = (new FileBundleEncoder(null, TranslatorTest::RESOURCES_DIR))->getStorageData('en');
-        $formatter   = new Formatter('de', 'Messages', new Translator(new BundleStorage($storageData)));
+        $formatter = new Formatter('de', 'Messages', new Translator(new BundleStorage($storageData)));
 
         $this->assertEquals('Hallo Welt', $formatter->formatMessage('Hello World'));
         $this->assertEquals('Good morning', $formatter->formatMessage('Good morning'));

@@ -30,8 +30,7 @@ interface TranslatorInterface
      * @param string $locale
      * @param string $namespace
      * @param string $message
-     * @param array  $args
-     *
+     * @param array $args
      * @return string
      */
     public function translateMessage(string $locale, string $namespace, string $message, array $args = []): string;

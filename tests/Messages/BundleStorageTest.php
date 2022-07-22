@@ -1,9 +1,8 @@
-<?php declare (strict_types = 1);
-
-namespace Whoa\Tests\l10n\Messages;
+<?php
 
 /**
  * Copyright 2015-2019 info@neomerx.com
+ * Modification Copyright 2021-2022 info@whoaphp.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +16,10 @@ namespace Whoa\Tests\l10n\Messages;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+declare (strict_types=1);
+
+namespace Whoa\Tests\l10n\Messages;
 
 use Whoa\l10n\Messages\BundleStorage;
 use PHPUnit\Framework\TestCase;
@@ -33,12 +36,12 @@ class BundleStorageTest extends TestCase
     {
         $messages = [
             'Key as a readable text' => ['Lets assume it would be german translation', 'de'],
-            'key_as_an_id'           => ['And that would be another german translation', 'de'],
+            'key_as_an_id' => ['And that would be another german translation', 'de'],
         ];
 
         $storage = new BundleStorage([
             BundleStorage::INDEX_DEFAULT_LOCALE => 'en',
-            BundleStorage::INDEX_DATA           => [
+            BundleStorage::INDEX_DATA => [
                 'de' => [
                     'ErrorMessages' => $messages
                 ],

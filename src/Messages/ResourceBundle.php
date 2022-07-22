@@ -22,6 +22,7 @@ declare (strict_types=1);
 namespace Whoa\l10n\Messages;
 
 use Whoa\l10n\Contracts\Messages\ResourceBundleInterface;
+
 use function array_keys;
 use function assert;
 use function is_scalar;
@@ -37,22 +38,22 @@ class ResourceBundle implements ResourceBundleInterface
     /**
      * @var string
      */
-    private $locale;
+    private string $locale;
 
     /**
      * @var string
      */
-    private $namespace;
+    private string $namespace;
 
     /**
      * @var array
      */
-    private $properties;
+    private array $properties;
 
     /**
      * @param string $locale
      * @param string $namespace
-     * @param array  $properties
+     * @param array $properties
      */
     public function __construct(string $locale, string $namespace, array $properties)
     {
@@ -95,7 +96,6 @@ class ResourceBundle implements ResourceBundleInterface
 
     /**
      * @param string $locale
-     *
      * @return self
      */
     public function setLocale(string $locale): self
@@ -109,7 +109,6 @@ class ResourceBundle implements ResourceBundleInterface
 
     /**
      * @param string $namespace
-     *
      * @return self
      */
     public function setNamespace(string $namespace): self
@@ -123,7 +122,6 @@ class ResourceBundle implements ResourceBundleInterface
 
     /**
      * @param array $properties
-     *
      * @return self
      */
     public function setProperties(array $properties): self

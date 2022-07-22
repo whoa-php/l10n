@@ -1,11 +1,8 @@
-<?php declare (strict_types = 1);
-
-/** @noinspection SpellCheckingInspection */
-
-namespace Whoa\Tests\l10n\Messages;
+<?php
 
 /**
  * Copyright 2015-2019 info@neomerx.com
+ * Modification Copyright 2021-2022 info@whoaphp.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +16,10 @@ namespace Whoa\Tests\l10n\Messages;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+declare (strict_types=1);
+
+namespace Whoa\Tests\l10n\Messages;
 
 use Whoa\l10n\Contracts\Format\TranslatorInterface;
 use Whoa\l10n\Format\Formatter;
@@ -40,13 +41,13 @@ class FileBundleEncoderTest extends TestCase
      */
     public function testLoadResources(): void
     {
-        $encoder = new FileBundleEncoder(null, __DIR__ . DIRECTORY_SEPARATOR);
+        $encoder = new FileBundleEncoder(null, __DIR__ . DIRECTORY_SEPARATOR . 'Resources');
 
         $storageData = $encoder->getStorageData('en');
-        /** @noinspection SpellCheckingInspection */
+
         $this->assertEquals([
             BundleStorage::INDEX_DEFAULT_LOCALE => 'en',
-            BundleStorage::INDEX_DATA           => [
+            BundleStorage::INDEX_DATA => [
                 'de' => [
                     'Messages' => [
                         'Hello World' => ['Hallo Welt', 'de'],
@@ -74,7 +75,7 @@ class FileBundleEncoderTest extends TestCase
             ['en_US', 'Messages', EnUsTestMessages::class],
         ];
 
-        $encoder = new FileBundleEncoder($messageDescriptions, __DIR__ . DIRECTORY_SEPARATOR);
+        $encoder = new FileBundleEncoder($messageDescriptions, __DIR__ . DIRECTORY_SEPARATOR . 'Resources');
         $storage = new BundleStorage($encoder->getStorageData('en'));
         $this->assertEquals(['Hello World from US.', 'en_US'], $storage->get('en_US', 'Messages', 'Hello World'));
     }
@@ -91,7 +92,7 @@ class FileBundleEncoderTest extends TestCase
         ];
 
         // pack them into a storage
-        $encoder = new FileBundleEncoder($messageDescriptions, __DIR__ . DIRECTORY_SEPARATOR);
+        $encoder = new FileBundleEncoder($messageDescriptions, __DIR__ . DIRECTORY_SEPARATOR . 'Resources2');
         $storage = new BundleStorage($encoder->getStorageData('en'));
 
         // create a translation with the actual translations...
@@ -100,7 +101,7 @@ class FileBundleEncoderTest extends TestCase
 
         // and create a formatter for some locales
         $enUs = new Formatter('en_US', OriginalMessages::class, $translator);
-        $de   = new Formatter('de', OriginalMessages::class, $translator);
+        $de = new Formatter('de', OriginalMessages::class, $translator);
         $deAt = new Formatter('de_AT', OriginalMessages::class, $translator);
 
         // now usage of every formatter looks identical however it produces different translations.
@@ -110,7 +111,7 @@ class FileBundleEncoderTest extends TestCase
         // where translation exist it will be returned 1
         static::assertEquals('Hallo Welt', $de->formatMessage(OriginalMessages::MSG_1));
         // where translation exist it will be returned 2
-        /** @noinspection SpellCheckingInspection */
+
         static::assertEquals('Hallo Welt aus Österreich', $deAt->formatMessage(OriginalMessages::MSG_1));
     }
 }

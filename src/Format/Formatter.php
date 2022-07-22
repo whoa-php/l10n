@@ -23,6 +23,7 @@ namespace Whoa\l10n\Format;
 
 use Whoa\Contracts\L10n\FormatterInterface;
 use Whoa\l10n\Contracts\Format\TranslatorInterface;
+
 use function assert;
 
 /**
@@ -33,29 +34,29 @@ class Formatter implements FormatterInterface
     /**
      * @var string
      */
-    private $locale;
+    private ?string $locale;
 
     /**
      * @var string
      */
-    private $namespace;
+    private string $namespace;
 
     /**
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
-     * @param string              $locale
-     * @param string              $namespace
+     * @param string $locale
+     * @param string $namespace
      * @param TranslatorInterface $translator
      */
     public function __construct(string $locale, string $namespace, TranslatorInterface $translator)
     {
         assert(empty($locale) === false && empty($namespace) === false);
 
-        $this->locale     = locale_canonicalize($locale);
-        $this->namespace  = $namespace;
+        $this->locale = locale_canonicalize($locale);
+        $this->namespace = $namespace;
         $this->translator = $translator;
     }
 
@@ -88,8 +89,6 @@ class Formatter implements FormatterInterface
      */
     public function formatMessage(string $message, array $args = []): string
     {
-        $result = $this->getTranslator()->translateMessage($this->getLocale(), $this->getNamespace(), $message, $args);
-
-        return $result;
+        return $this->getTranslator()->translateMessage($this->getLocale(), $this->getNamespace(), $message, $args);
     }
 }
